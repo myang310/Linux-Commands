@@ -1,0 +1,8 @@
+Echo program that mimics the basic functionalities of the Unix/Linux
+command 'echo'. Like the bash equivalent, it has the commands:
+
+-n:
+	No new line (after echoing)
+
+-e:
+	Allows for special characters (only tab, \t and new line, \n)
