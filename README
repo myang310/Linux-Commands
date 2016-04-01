@@ -6,3 +6,14 @@ command 'echo'. Like the bash equivalent, it has the commands:
 
 -e:
 	Allows for special characters (only tab, \t and new line, \n)
+
+FileList program that mimics the basic functionalities of the Unix/Linux
+command 'ls', but lacks the formatting. Like the bash equivalent, it has 
+the commands:
+
+-A:
+	prints all the files (including hidden files)
+-l:
+	prints the files and their properities
+-c:
+	prints the canonical path to the files
