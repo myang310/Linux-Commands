@@ -1,5 +1,3 @@
-package cli;
-
 import java.util.*;
 import java.io.*;
 import java.nio.*;
@@ -87,12 +85,22 @@ public class FileList {
 		ArrayList<String> formattedFiles = new ArrayList<String>();
 			
 		if (canonical)
-			for (int i = 0; i < numFiles; i++) 
-				formattedFiles.add(copyOfFiles.get(i).getCanonicalPath());
+			for (int i = 0; i < numFiles; i++) {
+				File currentFile = copyOfFiles.get(i);
+				if (currentFile.isDirectory())
+					formattedFiles.add(currentFile.getCanonicalPath() + "/");
+				else
+					formattedFiles.add(currentFile.getCanonicalPath());
+			}
 		else
-			for (int i = 0; i < numFiles; i++)
-				formattedFiles.add(copyOfFiles.get(i).getName());
-		
+			for (int i = 0; i < numFiles; i++) {
+				File currentFile = copyOfFiles.get(i);
+				if (currentFile.isDirectory())	
+					formattedFiles.add(currentFile.getName() + "/");		
+				else
+					formattedFiles.add(currentFile.getName());
+			}	
+
 		if (extended)
 			for (int i = 0; i < numFiles; i++) {
 				File current = copyOfFiles.get(i);
@@ -195,11 +203,11 @@ public class FileList {
 		try {
 			FileList.print(args);
 		} catch(FileNotFoundException fileNotFound) {
-			System.err.println(fileNotFound);
+			System.err.println("FileList: " + fileNotFound.getMessage());
 		} catch(IOException ioProblem) {
-			System.err.println(ioProblem);
+			System.err.println("FileList: " + ioProblem.getMessage());
 		} catch(SecurityException securityIssue) {
-			System.err.println(securityIssue);
+			System.err.println("FileList: " + securityIssue.getMessage());
 		}
 	}
 }
