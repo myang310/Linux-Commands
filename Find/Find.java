@@ -10,14 +10,14 @@ import java.io.IOException;
 public class Find {
 	private Find() {  }
 
-	private static String EMPTY = "";
+	private static String BLANK = "";
 
 	public static FileList in(String path, String name) throws FileNotFoundException, SecurityException 
 	{	// gathers all the files in the current path (with sought after name if given)
 		FileList fileList = FileList.empty();
 		List<File> allFiles = filesInDirectory(path);
 
-		if (name == EMPTY) 
+		if (name.equals(BLANK)) 
 		{	// put all files in the master list (allFiles) when no name is given
 			for (File file : allFiles) {
 				try 
@@ -60,7 +60,7 @@ public class Find {
 	public static void main(String[] args) {
 		boolean lookForPattern = false;	// does the user wish to look for a specific file name
 		String location = ".";				// the path variable to search in
-		String pattern = EMPTY;				// the file name to look for
+		String pattern = BLANK;				// the file name to look for
 		boolean noErrors = true;			// any errors encountered for missing or incorrect arguments
 
 		// parsing the user's input
@@ -83,7 +83,7 @@ public class Find {
 				if (lookForPattern) {
 					pattern = arg;
 					break;  // a pattern has been named: no further processing needed
-				} else if (location == ".") {
+				} else if (location.equals(".")) {
 					location = arg;
 				} else {
 					break;  // a path has already been given: no duplicates accepted, terminate processing
@@ -92,33 +92,35 @@ public class Find {
 		}
 
 		// make sure that the user didn't input -name but then forget to input the pattern to look for
-		if (lookForPattern && pattern == EMPTY) {
+		if (lookForPattern && pattern.equals(BLANK)) {
 			System.err.println("Find: missing argument to -name");
 			noErrors = false;
 		}
-
+		
 		// process and print out all the path names (equaling the pattern if applicable)
 		if (noErrors) {
-			// ignore SecurityExceptions, but print out any FileNotFoundException
-			try {
+			try 
+			{	// ignore IOExceptions, but print out any FileNotFoundExceptions and SecurityExeptions
 				List<File> allFiles = Find.filesInDirectory(location);
 				if (lookForPattern) {
 					for (File file : allFiles) {
-						if (file.getName() == pattern) {
-							if (file.canRead() || file.isHidden())
+						if (file.getName().equals(pattern)) {
+							if (file.canRead() || (file.isHidden() && file.canRead()))
+							{	// only print out files that have read permission, even if hidden
 								System.out.println(file.getCanonicalPath());
-							else
+							} else
 								System.err.println("Find: cannot access " + file.getPath() +
-											": Permission denied (read)"));
+											": Permission denied (read)");
 						}
 					}
 				} else {
 					for (File file : allFiles) {
-						if (file.canRead() || file.isHidden())
+						if (file.canRead() || (file.isHidden() && file.canRead())) 
+						{	// only print out files that have read permission, even if hidden
 							System.out.println(file.getCanonicalPath());
-						else
+						} else
 							System.err.println("Find: cannot access " + file.getPath() +
-										": Permission denied (read)"));
+										": Permission denied (read)");
 					}
 				}
 
