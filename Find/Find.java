@@ -1,8 +1,8 @@
-package cli;
+package Find;
 
 import java.io.File;
 import java.util.*;
-import cli.FileList;
+import FileList.FileList;
 import java.io.FileNotFoundException;
 import java.lang.SecurityException;
 import java.io.IOException;
@@ -53,7 +53,7 @@ public class Find {
 				completeList.addAll(directoryFiles);
 			}
 		}
-		
+		Collections.sort(completeList);	
 		return completeList;
 	}
 
